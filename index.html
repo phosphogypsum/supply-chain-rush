@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>أنقذ سلسلة التوريد | Supply Chain Rush</title>
+<meta name="description" content="لعبة تعليمية - ورشة مقدمة في سلسلة التوريد - لجنة المهندسين الشباب الكيميائية، نقابة المهندسين الأردنيين">
+<meta property="og:title" content="🚚 أنقذ سلسلة التوريد - Supply Chain Rush">
+<meta property="og:description" content="مهمة 4 دقائق: أنقذ طلبية المصنع وتصدّر لوحة الترتيب!">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#071a3d;--navy2:#0c2a5b;--blue:#1e7bff;--elec:#2fa8ff;--teal:#13c6b3;--orange:#ff8a1f;--white:#fff;--muted:#a9bddc;--ok:#20d48a;--mid:#ffc23d;--bad:#ff5a5f;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.14)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--navy);color:var(--white);font-family:Cairo,system-ui,sans-serif}
+body{background:radial-gradient(1200px 700px at 80% -10%,#174a9c 0%,transparent 60%),radial-gradient(900px 600px at -10% 110%,#0b5e67 0%,transparent 55%),var(--navy);background-attachment:fixed}
+#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:.35;pointer-events:none}
+.app{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:14px 16px 28px;min-height:100vh;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;animation:in .45s ease}
+.screen.on{display:flex}
+.anim{animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h1,h2,h3,p{margin:0}
+.logos{display:flex;gap:10px;justify-content:center;align-items:center}
+.logos img{background:#fff;border-radius:14px;padding:8px 12px;height:66px;object-fit:contain;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.logos.sm img{height:38px;border-radius:9px;padding:4px 7px}
+.hero{text-align:center;margin-top:14px}
+.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--teal);background:rgba(19,198,179,.12);border:1px solid rgba(19,198,179,.35);padding:3px 12px;border-radius:99px}
+.title{font-size:clamp(30px,8.5vw,44px);font-weight:900;line-height:1.15;margin:10px 0 2px;background:linear-gradient(90deg,#fff,#9fd4ff 60%,var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.en{direction:ltr;font-weight:700;letter-spacing:2px;color:var(--orange);font-size:14px}
+.event{margin:14px 0;padding:12px 14px;border:1px solid var(--line);background:var(--card);border-radius:16px;font-size:13px;color:var(--muted);line-height:1.8}
+.event b{color:#fff}
+.story{font-size:15px;line-height:1.8;text-align:center;margin:6px 4px 12px}
+input{width:100%;font:inherit;font-size:18px;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:rgba(255,255,255,.08);color:#fff;outline:none;text-align:center}
+input:focus{border-color:var(--elec)}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:16px;padding:15px;font:inherit;font-size:19px;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--orange),#ff5e3a);box-shadow:0 10px 28px rgba(255,120,40,.35);transition:transform .15s,opacity .2s}
+.btn:active{transform:scale(.97)}.btn:disabled{opacity:.45}
+.btn.alt{background:linear-gradient(135deg,var(--blue),var(--teal));box-shadow:0 10px 28px rgba(30,123,255,.3)}
+.btn.ghost{background:transparent;border:1px solid var(--line);box-shadow:none;font-size:15px;padding:10px}
+.err{color:var(--bad);font-size:13px;text-align:center;min-height:20px;margin-top:6px}
+.small{font-size:12px;color:var(--muted);text-align:center;line-height:1.7}
+/* HUD */
+.hud{position:sticky;top:0;z-index:5;background:rgba(7,26,61,.85);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:12px}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.stat{display:flex;flex-direction:column;align-items:center;min-width:70px}
+.stat small{font-size:11px;color:var(--muted)}
+.stat b{font-size:22px;font-weight:900;line-height:1.1}
+#timer.low{color:var(--bad);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.stages{display:flex;justify-content:space-between;position:relative;margin-top:10px;padding:0 4px}
+.stages:before{content:"";position:absolute;top:15px;right:18px;left:18px;height:4px;background:var(--line);border-radius:4px}
+.bar{position:absolute;top:15px;right:18px;height:4px;background:linear-gradient(90deg,var(--teal),var(--elec));border-radius:4px;transition:width .6s}
+.st{position:relative;z-index:1;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:var(--navy2);border:2px solid var(--line);transition:.3s}
+.st.done{border-color:var(--teal);background:#0e4f63}.st.cur{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,138,31,.25)}
+.status{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+.status b{color:var(--teal)}
+/* challenge */
+.ch-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.ch-num{font-size:12px;font-weight:900;color:var(--navy);background:var(--teal);padding:2px 10px;border-radius:99px}
+.ch-title{font-size:21px;font-weight:900}
+.ch-en{direction:ltr;font-size:12px;color:var(--orange);font-weight:700;letter-spacing:1px}
+.brief{font-size:15px;line-height:1.75;margin:4px 0 12px;color:#dbe7fb}
+.brief b{color:var(--orange)}
+.cards{display:grid;gap:10px}
+.card{position:relative;display:flex;gap:12px;align-items:center;text-align:right;width:100%;font:inherit;color:#fff;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px;cursor:pointer;transition:transform .15s,border-color .2s,background .2s}
+.card:active{transform:scale(.98)}
+.card:hover{border-color:rgba(47,168,255,.6)}
+.card.sel{border-color:var(--elec);background:rgba(47,168,255,.14)}
+.card.good{border-color:var(--ok);background:rgba(32,212,138,.14)}
+.card.mid{border-color:var(--mid);background:rgba(255,194,61,.12)}
+.card.bad{border-color:var(--bad);background:rgba(255,90,95,.12)}
+.card[disabled]{cursor:default}
+.ico{flex:0 0 58px;height:58px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+.ico svg{width:46px;height:46px}
+.cbody{flex:1}
+.cname{font-weight:900;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.chip{font-size:12px;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.08);white-space:nowrap}
+.chip.r{color:#ffb3b5}.chip.g{color:#9ff0cd}.chip.y{color:#ffe08a}
+/* warehouse */
+.wh{background:linear-gradient(#0f3470,#0a2550);border:2px solid var(--line);border-radius:20px;padding:12px 10px 10px;position:relative}
+.wh-roof{height:22px;margin:-12px -10px 10px;background:repeating-linear-gradient(90deg,#1b4d93 0 18px,#163f7c 18px 36px);border-radius:18px 18px 0 0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#cfe3ff}
+.tanks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tank{font:inherit;color:#fff;background:rgba(255,255,255,.05);border:2px solid var(--line);border-radius:14px;padding:8px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.2s}
+.tank:active{transform:scale(.96)}
+.vessel{width:42px;height:78px;border:3px solid #cfe3ff;border-radius:10px 10px 6px 6px;position:relative;overflow:hidden;background:rgba(0,0,0,.25)}
+.lvl{position:absolute;bottom:0;left:0;right:0;transition:height 1s}
+.need{position:absolute;left:-2px;right:-2px;border-top:2px dashed var(--orange)}
+.tank .nm{font-size:12px;font-weight:900;line-height:1.2;text-align:center}
+.tank .q{font-size:11px;color:var(--muted);direction:ltr}
+.legend{display:flex;gap:12px;justify-content:center;font-size:11px;color:var(--muted);margin-top:8px}
+/* map */
+.map{background:#0b2a55;border:2px solid var(--line);border-radius:20px;overflow:hidden}
+.map svg{display:block;width:100%;height:auto}
+.route{cursor:pointer}
+.route .vis{transition:stroke-width .2s}
+.route.sel .vis{stroke-width:9}
+/* emergency */
+.alarm{border:2px solid var(--bad);background:linear-gradient(135deg,rgba(255,90,95,.18),rgba(255,138,31,.1));border-radius:20px;padding:12px;display:flex;gap:12px;align-items:center;margin-bottom:12px;animation:shake .6s 2}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.siren{font-size:36px;animation:pulse .8s infinite}
+.opt{display:flex;gap:10px;align-items:center}
+.opt .k{flex:0 0 40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(255,255,255,.08)}
+/* sequence */
+.seq .card{padding:10px 12px}
+.badge{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:2px dashed var(--line);color:var(--muted)}
+.card.picked .badge{border:0;background:var(--orange);color:#fff}
+.row2{display:flex;gap:8px}.row2 .btn{flex:1}
+/* feedback */
+.fb{display:none;margin-top:12px;border-radius:18px;padding:14px;border:2px solid var(--line);background:rgba(7,26,61,.9);animation:in .35s}
+.fb.on{display:block}
+.fb.good{border-color:var(--ok)}.fb.mid{border-color:var(--mid)}.fb.bad{border-color:var(--bad)}
+.fbh{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:18px}
+.pts{font-size:22px}
+.fb.good .pts{color:var(--ok)}.fb.mid .pts{color:var(--mid)}.fb.bad .pts{color:var(--bad)}
+.fb p{font-size:14px;line-height:1.75;margin-top:6px;color:#dbe7fb}
+/* delivery */
+.road{position:relative;height:120px;margin:10px 0;border-radius:18px;overflow:hidden;background:linear-gradient(#0f3470 0 62%,#2a3346 62%)}
+.road:after{content:"";position:absolute;left:0;right:0;top:88px;border-top:3px dashed #ffd36b;opacity:.7}
+.truck{position:absolute;top:44px;right:-10px;width:110px;transition:right 3.2s cubic-bezier(.4,.1,.3,1)}
+.truck.go{right:calc(100% - 120px)}
+.dest{position:absolute;left:8px;top:22px;width:70px;text-align:center;font-size:11px;font-weight:700}
+.wheel{transform-box:fill-box;transform-origin:center;animation:spin .5s linear infinite}
+@keyframes spin{to{transform:rotate(-360deg)}}
+/* results */
+.score-big{font-size:68px;font-weight:900;text-align:center;line-height:1;margin-top:10px;background:linear-gradient(90deg,var(--orange),#ffd36b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.of{text-align:center;color:var(--muted);font-weight:700}
+.rating{text-align:center;font-size:18px;font-weight:900;margin:8px 0 2px}
+.lb{margin-top:14px;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:12px}
+.lb h3{font-size:18px;display:flex;justify-content:space-between;align-items:center}
+.lb h3 small{font-size:12px;color:var(--muted);font-weight:600}
+.podium{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:8px;align-items:end;margin:12px 0}
+.pod{text-align:center;border-radius:14px 14px 6px 6px;padding:8px 4px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.pod .m{font-size:30px}.pod .n{font-weight:900;font-size:13px;word-break:break-word}.pod .s{font-size:13px;color:var(--orange);font-weight:900}
+.pod.p1{min-height:132px;background:linear-gradient(rgba(255,194,61,.25),rgba(255,194,61,.05));border-color:rgba(255,194,61,.5)}
+.pod.p2{min-height:112px}.pod.p3{min-height:98px}
+.pod.me,.lrow.me{outline:2px solid var(--teal);background:rgba(19,198,179,.18)}
+.lrow{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;margin-top:6px;background:rgba(255,255,255,.04)}
+.lrow .r{width:30px;font-weight:900;color:var(--muted);text-align:center}
+.lrow .n{flex:1;font-weight:700;word-break:break-word}
+.lrow .s{font-weight:900;color:var(--orange)}
+.lrow .t{font-size:11px;color:var(--muted);direction:ltr;min-width:34px;text-align:left}
+.empty{text-align:center;color:var(--muted);padding:18px 8px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:20}
+.loading{opacity:.7;pointer-events:none}
+@media (min-width:700px){.app{padding-top:24px}}
+</style>
+</head>
+<body>
+<canvas id="net"></canvas>
+<div class="app">
+
+<!-- WELCOME -->
+<section class="screen" id="s-welcome">
+  <div class="logos"><img src="jea.png" alt="نقابة المهندسين الأردنيين"><img src="ycec.png" alt="لجنة المهندسين الشباب الكيميائية"></div>
+  <div class="hero">
+    <span class="tag">ورشة: مقدمة في سلسلة التوريد</span>
+    <h1 class="title">أنقذ سلسلة التوريد 🏭</h1>
+    <div class="en">SUPPLY CHAIN RUSH</div>
+  </div>
+  <svg viewBox="0 0 360 120" style="width:100%;margin:8px 0" aria-hidden="true">
+    <defs><linearGradient id="fg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2fa8ff"/><stop offset="1" stop-color="#1e5fbf"/></linearGradient></defs>
+    <rect x="0" y="104" width="360" height="16" rx="4" fill="#0c2a5b"/>
+    <g><rect x="26" y="40" width="16" height="64" fill="#9fb6d9"/><rect x="50" y="28" width="16" height="76" fill="#b9cbe6"/>
+      <circle cx="34" cy="32" r="8" fill="#fff" opacity=".35"><animate attributeName="cy" values="32;10" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".4;0" dur="2.5s" repeatCount="indefinite"/></circle>
+      <circle cx="58" cy="20" r="9" fill="#fff" opacity=".35"><animate attributeName="cy" values="20;0" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".4;0" dur="3s" repeatCount="indefinite"/></circle>
+      <path d="M16 104V62l30-16v16l30-16v16l30-16v58z" fill="url(#fg)"/><rect x="28" y="78" width="12" height="12" fill="#ffd36b"/><rect x="58" y="78" width="12" height="12" fill="#ffd36b"/><rect x="88" y="78" width="12" height="12" fill="#ffd36b"/>
+      <rect x="116" y="58" width="22" height="46" rx="10" fill="#13c6b3"/><rect x="142" y="66" width="22" height="38" rx="10" fill="#0fa596"/></g>
+    <path d="M170 96 H300" stroke="#ffd36b" stroke-width="2" stroke-dasharray="8 7"><animate attributeName="stroke-dashoffset" values="30;0" dur="1s" repeatCount="indefinite"/></path>
+    <g transform="translate(196 70)"><rect width="50" height="26" rx="4" fill="#ff8a1f"/><path d="M50 8h14l8 10v8H50z" fill="#fff"/><circle cx="12" cy="28" r="5" fill="#1a2233"/><circle cx="60" cy="28" r="5" fill="#1a2233"/><animateTransform attributeName="transform" type="translate" values="176 70;236 70;176 70" dur="6s" repeatCount="indefinite"/></g>
+    <g transform="translate(300 44)"><rect width="52" height="60" fill="#e9f1ff"/><path d="M-4 0h60L26-18z" fill="#ff8a1f"/><rect x="18" y="34" width="16" height="26" fill="#1e7bff"/><text x="26" y="22" font-size="11" text-anchor="middle" fill="#0c2a5b" font-family="Cairo" font-weight="700">العميل</text></g>
+  </svg>
+  <p class="story">أنت <b>مهندس سلسلة التوريد</b> في شركة «الأفق للكيماويات». وصلت طلبية عاجلة: <b style="color:var(--orange)">20 طن منظّف صناعي</b> لعميل في العقبة. أدِر الشراء والمخزون والنقل والمخاطر… أمامك <b>4 دقائق</b>!</p>
+  <input id="name" maxlength="24" placeholder="اكتب اسمك هنا" autocomplete="name">
+  <button class="btn" id="startBtn">ابدأ المهمة 🚀</button>
+  <div class="err" id="startErr"></div>
+  <div class="event">🗓️ <b>الأحد 15 تشرين الثاني 2026</b> · 6:00–8:00 مساءً · Microsoft Teams<br>🎤 المتحدثة: <b>م. رغد يوسف</b><br>تنظيم: لجنة المهندسين الشباب الكيميائية (YCEC) – نقابة المهندسين الأردنيين</div>
+  <p class="small">5 تحديات · 1000 نقطة · محاولة رسمية واحدة لكل متصفح</p>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="s-game">
+  <div class="hud">
+    <div class="hrow">
+      <div class="stat"><small>النقاط</small><b id="score">0</b></div>
+      <div class="logos sm"><img src="jea.png" alt="JEA"><img src="ycec.png" alt="YCEC"></div>
+      <div class="stat"><small>الوقت المتبقي</small><b id="timer">4:00</b></div>
+    </div>
+    <div class="stages" id="stages"><div class="bar" id="bar"></div></div>
+    <div class="status" id="status"></div>
+  </div>
+  <div id="stage"></div>
+  <div class="fb" id="fb"><div class="fbh"><span id="fbT"></span><span class="pts" id="fbP"></span></div><p id="fbX"></p><button class="btn alt" id="nextBtn">التالي ←</button></div>
+</section>
+
+<!-- RESULTS -->
+<section class="screen" id="s-result">
+  <div class="logos"><img src="jea.png" alt="نقابة المهندسين الأردنيين"><img src="ycec.png" alt="لجنة المهندسين الشباب الكيميائية"></div>
+  <p class="rating" id="rTitle" style="margin-top:14px"></p>
+  <div class="score-big" id="rScore">0</div>
+  <div class="of">من 1000 نقطة</div>
+  <p class="small" id="rName" style="margin-top:6px"></p>
+  <div class="lb">
+    <h3>🏆 لوحة الترتيب <small id="lbTotal"></small></h3>
+    <div id="lbBody"><div class="empty">جارٍ التحميل…</div></div>
+    <button class="btn ghost" id="refreshBtn">🔄 تحديث الترتيب</button>
+  </div>
+  <p class="small" style="margin-top:12px">محاولة رسمية واحدة لكل متصفح. المشاركة بالاسم فقط لا تمنع تماماً اللعب من متصفح أو جهاز آخر.</p>
+</section>
+</div>
+
+<script>
+const API='https://rbewzpzjrhwirxtiezcv.supabase.co/rest/v1/rpc/';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZXd6cHpqcmh3aXJ4dGllemN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQxMzk4NDUsImV4cCI6MjEwOTcxNTg0NX0.jdgjit90qPPBvF6N6B9WC9FFODr9WpvyCLXv7EWRyb8';
+const LS='scr_attempt_v1';
+const $=s=>document.querySelector(s);
+async function rpc(fn,body){
+  for(let i=0;i<3;i++){
+    try{const r=await fetch(API+fn,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const j=await r.json(); if(!r.ok) throw Object.assign(new Error(j.message||'error'),{fatal:r.status<500}); return j;}
+    catch(e){if(e.fatal||i==2) throw e; await new Promise(r=>setTimeout(r,700*(i+1)));}
+  }
+}
+const store={get(){try{return JSON.parse(localStorage.getItem(LS))}catch(e){return null}},set(v){try{localStorage.setItem(LS,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- SVG icons ---------- */
+const I={
+ sup:c=>`<svg viewBox="0 0 48 48"><rect x="4" y="20" width="40" height="24" rx="3" fill="${c}"/><path d="M4 20l10-10h20l10 10z" fill="#fff" opacity=".85"/><rect x="18" y="30" width="12" height="14" fill="#071a3d" opacity=".55"/><circle cx="11" cy="28" r="2.5" fill="#fff"/><circle cx="37" cy="28" r="2.5" fill="#fff"/></svg>`,
+ truck:`<svg viewBox="0 0 120 60"><rect x="4" y="8" width="70" height="36" rx="5" fill="#ff8a1f"/><text x="39" y="31" font-size="11" text-anchor="middle" fill="#fff" font-family="Cairo" font-weight="900">الأفق</text><path d="M74 18h22l14 14v12H74z" fill="#e9f1ff"/><path d="M80 22h14l9 9H80z" fill="#2fa8ff"/><g class="wheel"><circle cx="22" cy="48" r="8" fill="#1a2233"/><circle cx="22" cy="48" r="3" fill="#aaa"/></g><g class="wheel"><circle cx="94" cy="48" r="8" fill="#1a2233"/><circle cx="94" cy="48" r="3" fill="#aaa"/></g></svg>`
+};
+
+/* ---------- Challenges (feedback text only; scoring is computed on the server) ---------- */
+const CH=[
+ {k:'PROCUREMENT',t:'اختيار المورد',e:'🛒',status:'قسم المشتريات يختار المورد',
+  brief:'يحتاج المصنع <b>صودا كاوية NaOH</b> بنقاوة <b>≥ 99%</b> وتصل خلال <b>3 أيام</b>. اختر المورد الأنسب:',
+  render(){return `<div class="cards">${[
+   ['A','مورد ألفا','#ff5a5f',[['r','💲 380 $/طن'],['r','🧪 نقاوة 92%'],['g','🚚 يومان']]],
+   ['B','مورد بيتا','#13c6b3',[['y','💲 450 $/طن'],['g','🧪 نقاوة 99.5% · ISO 9001'],['g','🚚 3 أيام']]],
+   ['C','مورد غاما','#2fa8ff',[['r','💲 620 $/طن'],['g','🧪 نقاوة 99.9%'],['r','🚢 9 أيام (استيراد)']]]
+  ].map(([id,n,c,ch])=>`<button class="card" data-c="${id}"><div class="ico">${I.sup(c)}</div><div class="cbody"><div class="cname">${n}</div><div class="chips">${ch.map(([k,v])=>`<span class="chip ${k}">${v}</span>`).join('')}</div></div></button>`).join('')}</div>`},
+  best:'B',ex:'مورد بيتا يحقق المواصفة والموعد بسعر معقول. الأرخص غير مطابق فيُفسد الدفعة، والأعلى جودةً يتأخر؛ المعيار هو <b>القيمة الكلية (Total Cost of Ownership)</b> لا السعر وحده.'},
+ {k:'INVENTORY',t:'إدارة المخزون',e:'🏬',status:'المستودع يراجع المواد الخام',
+  brief:'الخط المتقطع = احتياج الطلبية. <b>اضغط على المادة التي يجب إعادة طلبها فوراً</b> لضمان استمرار الإنتاج:',
+  render(){const T=[['labsa','LABSA','18 / 12 t',75,50,'#2fa8ff'],['naoh','NaOH صودا كاوية','2 / 6 t',12,36,'#ff5a5f'],['drums','عبوات','900 / 800',62,55,'#13c6b3'],['fragrance','عطور','3000 / 200 L',96,7,'#c58bff']];
+   return `<div class="wh"><div class="wh-roof">🏬 مستودع المواد الخام · Warehouse</div><div class="tanks">${T.map(([id,n,q,l,nd,c])=>`<button class="tank card" style="display:flex" data-c="${id}"><div class="vessel"><div class="lvl" style="height:${l}%;background:${c}"></div><div class="need" style="bottom:${nd}%"></div></div><div class="nm">${n}</div><div class="q">${q}</div></button>`).join('')}</div>
+   <div class="legend"><span>المتوفر / المطلوب</span><span style="color:var(--orange)">- - - الاحتياج</span></div></div>
+   <div class="cards" style="margin-top:10px"><button class="card" data-c="all"><div class="ico" style="font-size:26px">📦</div><div class="cbody"><div class="cname">اطلب كميات كبيرة من كل المواد لثلاثة أشهر</div></div></button></div>`},
+  best:'naoh',ex:'الصودا الكاوية أقل من الاحتياج ومن <b>نقطة إعادة الطلب (Reorder Point)</b>، ونقصها يوقف الإنتاج. شراء كل شيء بكميات ضخمة يرفع <b>تكلفة التخزين (Holding Cost)</b> بلا داعٍ.'},
+ {k:'LOGISTICS',t:'سباق التوصيل',e:'🗺️',status:'المنتج جاهز للشحن من الزرقاء',
+  brief:'يجب أن تصل الشحنة من <b>الزرقاء</b> إلى <b>العقبة</b> خلال <b>8 ساعات</b>. اضغط على المسار الأنسب:',
+  render(){const R=[['desert','الطريق الصحراوي','#13c6b3','M90 40 C 110 120, 70 190, 112 300',[['g','⏱ 4.5 ساعة'],['y','💲 900 دينار'],['g','✅ موثوقية 95%']]],
+     ['deadsea','طريق البحر الميت','#ffc23d','M90 40 C 30 90, 60 150, 30 200 S 70 270, 112 300',[['y','⏱ 6 ساعات'],['g','💲 700 دينار'],['r','⚠️ موثوقية 70% (صيانة وطريق جبلي)']]],
+     ['air','شحن جوي','#c58bff','M90 40 Q 250 150, 112 300',[['g','⏱ 3 ساعات'],['r','💲 4,500 دينار'],['r','⛔ قيود على شحن الكيماويات']]]];
+   return `<div class="map"><svg viewBox="0 0 300 330"><rect width="300" height="330" fill="#0b2a55"/><path d="M0 0h300v330H0z" fill="url(#none)"/>
+   <path d="M40 20 L260 10 L280 320 L120 325 L20 200 Z" fill="#c9a96b" opacity=".18"/><ellipse cx="30" cy="150" rx="14" ry="45" fill="#2fa8ff" opacity=".45"/><text x="30" y="215" font-size="10" fill="#9fd4ff" text-anchor="middle" font-family="Cairo">البحر الميت</text>
+   ${R.map(([id,n,c,d])=>`<g class="route" data-c="${id}"><path d="${d}" stroke="transparent" stroke-width="30" fill="none"/><path class="vis" d="${d}" stroke="${c}" stroke-width="6" fill="none" stroke-linecap="round" ${id=='air'?'stroke-dasharray="10 9"':''}/></g>`).join('')}
+   <text x="200" y="120" font-size="22">✈️</text>
+   <circle cx="90" cy="40" r="10" fill="#ff8a1f"/><text x="108" y="36" font-size="13" fill="#fff" font-family="Cairo" font-weight="900">🏭 الزرقاء</text>
+   <circle cx="112" cy="300" r="10" fill="#20d48a"/><text x="130" y="306" font-size="13" fill="#fff" font-family="Cairo" font-weight="900">العقبة 📍</text></svg></div>
+   <div class="cards" style="margin-top:10px">${R.map(([id,n,c,d,ch])=>`<button class="card" data-c="${id}"><div class="ico"><svg viewBox="0 0 48 48"><path d="M6 40 C 16 8, 32 40, 42 8" stroke="${c}" stroke-width="6" fill="none" stroke-linecap="round"/></svg></div><div class="cbody"><div class="cname">${n}</div><div class="chips">${ch.map(([k,v])=>`<span class="chip ${k}">${v}</span>`).join('')}</div></div></button>`).join('')}</div>`},
+  best:'desert',ex:'الطريق الصحراوي يوازن بين <b>الوقت والتكلفة والموثوقية</b>. الأرخص قد يتأخر عن الموعد، والأسرع مكلف جداً ومقيّد لشحن المواد الكيميائية.'},
+ {k:'RISK MANAGEMENT',t:'أزمة مفاجئة',e:'🚨',status:'⚠️ اضطراب في سلسلة التوريد!',
+  brief:'',render(){return `<div class="alarm"><div class="siren">🚨</div><div><b>تنبيه طارئ!</b><br><span style="font-size:14px;color:#ffd7d8">المورد أعلن تأخير شحنة الصودا الكاوية <b>يومين</b> بسبب عطل في مصنعه. ماذا تفعل؟</span></div></div>
+   <div class="cards">${[['backup','🔁','فعّل المورد البديل المعتمد مسبقاً وأبلغ العميل بالخطة'],['partial','📦','استخدم مخزون الأمان لإنتاج جزء من الطلبية وفاوض العميل على تسليم جزئي'],['cheap','💸','اشترِ مادة بديلة رخيصة من بائع غير معتمد'],['wait','⏳','انتظر المورد ولا تُبلغ أحداً']].map(([id,k,n])=>`<button class="card opt" data-c="${id}"><span class="k">${k}</span><span class="cbody cname" style="font-size:15px">${n}</span></button>`).join('')}</div>`},
+  best:'backup',ex:'وجود <b>خطة طوارئ (Contingency Plan)</b> ومورد بديل معتمد <b>(Dual Sourcing)</b> يحمي استمرارية التوريد ويبني <b>المرونة (Resilience)</b>. التسليم الجزئي حل مقبول لكنه أضعف.'},
+ {k:'FINAL MISSION',t:'أنقذ الطلبية',e:'🚚',status:'المرحلة الأخيرة: تسليم الطلبية',seq:true,
+  brief:'<b>اضغط على الخطوات بالترتيب الصحيح</b> من 1 إلى 5 لتسليم الطلبية للعميل:',
+  render(){return `<div class="cards seq">${[['docs','📄','مستندات الشحن وصحيفة السلامة','Shipping Docs & SDS'],['load','🚛','التحميل والإرسال','Dispatch'],['qc','🔬','فحص الجودة وإصدار الشهادة','QC Release'],['pod','✅','تأكيد الاستلام من العميل','Proof of Delivery'],['pack','🛢️','التعبئة وملصقات المواد الكيميائية','Packing & Labeling']].map(([id,k,n,en])=>`<button class="card" data-s="${id}"><span class="badge">?</span><span class="cbody"><span class="cname" style="font-size:15px">${k} ${n}</span><br><span class="ch-en" style="font-size:11px">${en}</span></span></button>`).join('')}</div>
+   <div class="row2"><button class="btn ghost" id="seqReset">↺ إعادة الترتيب</button><button class="btn" id="seqGo" disabled>🚚 أرسل الشحنة</button></div>`},
+  best:'qc,pack,docs,load,pod',ex:'لا يُشحن منتج قبل اجتياز <b>الجودة</b>، ولا يُحمَّل قبل <b>تعبئته وتوثيقه</b>، وتنتهي العملية بـ<b>إثبات الاستلام</b>.'}
+];
+
+/* ---------- State ---------- */
+let S=null, cur=0, endAt=0, tick=null, shownScore=0, busy=false, locked=false;
+
+function stagesUI(){
+  $('#stages').innerHTML='<div class="bar" id="bar"></div>'+CH.map((c,i)=>`<div class="st ${i<cur?'done':i==cur?'cur':''}">${i<cur?'✓':c.e}</div>`).join('');
+  $('#bar').style.width=`calc(${Math.min(cur,4)/4} * (100% - 36px))`;
+  $('#status').innerHTML='حالة الطلبية: <b>'+(cur<5?CH[cur].status:'تم التسليم ✅')+'</b>';
+}
+function animScore(to){const from=shownScore;shownScore=to;const t0=performance.now();
+  const f=t=>{const p=Math.min(1,(t-t0)/700);$('#score').textContent=Math.round(from+(to-from)*p);if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==id));scrollTo(0,0)}
+function sumPts(){return Object.values(S.answers||{}).reduce((a,v)=>a+v.p,0)}
+
+function startTimer(rem){endAt=Date.now()+rem*1000;clearInterval(tick);
+  const up=()=>{const r=Math.max(0,Math.ceil((endAt-Date.now())/1000));$('#timer').textContent=Math.floor(r/60)+':'+String(r%60).padStart(2,'0');$('#timer').classList.toggle('low',r<=30);if(r<=0){clearInterval(tick);timeUp()}};
+  up();tick=setInterval(up,250)}
+async function timeUp(){if(S.finished)return;try{S=await rpc('scr_finish',{p_id:S.id,p_secret:store.get().secret})}catch(e){}results(true)}
+
+function renderChallenge(){
+  locked=false;$('#fb').className='fb';stagesUI();
+  const c=CH[cur];
+  $('#stage').innerHTML=`<div class="anim"><div class="ch-head"><span class="ch-num">التحدي ${cur+1}/5</span><div><div class="ch-title">${c.e} ${c.t}</div><div class="ch-en">${c.k}</div></div></div>${c.brief?`<p class="brief">${c.brief}</p>`:''}${c.render()}</div>`;
+  if(c.seq) bindSeq(); else document.querySelectorAll('#stage [data-c]').forEach(el=>el.addEventListener('click',()=>answer(el.dataset.c)));
+}
+function bindSeq(){let order=[];const go=$('#seqGo');
+  const paint=()=>{document.querySelectorAll('#stage [data-s]').forEach(b=>{const i=order.indexOf(b.dataset.s);b.classList.toggle('picked',i>=0);b.querySelector('.badge').textContent=i>=0?i+1:'?'});go.disabled=order.length<5};
+  document.querySelectorAll('#stage [data-s]').forEach(b=>b.addEventListener('click',()=>{if(busy||locked)return;const s=b.dataset.s;if(!order.includes(s))order.push(s);paint()}));
+  $('#seqReset').onclick=()=>{if(!busy&&!locked){order=[];paint()}};
+  go.onclick=()=>answer(order.join(','));
+}
+async function answer(choice){
+  if(busy||locked||S.finished)return;busy=true;$('#stage').classList.add('loading');
+  document.querySelectorAll('#stage [data-c]').forEach(el=>el.classList.toggle('sel',el.dataset.c==choice));
+  let r;try{r=await rpc('scr_answer',{p_id:S.id,p_secret:store.get().secret,p_ch:cur+1,p_choice:choice})}
+  catch(e){busy=false;$('#stage').classList.remove('loading');alert('تعذّر الاتصال، حاول مرة أخرى.');return}
+  S=r;busy=false;locked=true;$('#stage').classList.remove('loading');
+  const c=CH[cur],p=r.points,cls=p>=200?'good':p>0?'mid':'bad';
+  document.querySelectorAll('#stage [data-c],#stage [data-s]').forEach(el=>{el.disabled=true;const v=el.dataset.c;if(v){el.classList.remove('sel');if(v==c.best)el.classList.add('good');else if(v==choice)el.classList.add(cls)}});
+  animScore(sumPts());
+  if(c.seq){const best=c.best.split(',');document.querySelectorAll('#stage [data-s]').forEach(b=>b.classList.add(best.indexOf(b.dataset.s)==choice.split(',').indexOf(b.dataset.s)?'good':'bad'));}
+  $('#fbT').textContent=p>=200?'🎯 قرار ممتاز!':p>0?'👍 قرار مقبول جزئياً':'❌ قرار غير مناسب';
+  $('#fbP').textContent='+'+p;$('#fbX').innerHTML=c.ex;$('#fb').className='fb on '+cls;
+  $('#nextBtn').textContent=cur<4?'التحدي التالي ←':'🚚 شاهد التسليم';
+  if(r.finished && cur<4) {$('#nextBtn').textContent='انتهى الوقت – النتيجة';}
+  setTimeout(()=>$('#fb').scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+$('#nextBtn').onclick=()=>{if(S.finished&&cur<4)return results(true);cur++;if(cur<5)renderChallenge();else deliver()};
+
+function deliver(){clearInterval(tick);stagesUI();$('#fb').className='fb';
+  const ok=(S.answers['5']||{}).p==200;
+  $('#stage').innerHTML=`<div class="ch-title" style="text-align:center">${ok?'🎉 الشحنة في الطريق!':'🚚 الشحنة في الطريق…'}</div><div class="road"><div class="dest"><div style="font-size:32px">🏢</div>العميل – العقبة</div><div class="truck" id="trk">${I.truck}</div></div><p class="brief" style="text-align:center">${ok?'تسلسل مثالي: جودة ← تعبئة ← توثيق ← شحن ← إثبات استلام.':'وصلت الطلبية، لكن ترتيب الخطوات لم يكن مثالياً.'}</p>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>$('#trk').classList.add('go')));
+  setTimeout(()=>results(false),3800);
+}
+
+async function results(timeout){
+  clearInterval(tick);show('s-result');
+  const sc=S.score||sumPts();
+  $('#rTitle').textContent=timeout&&Object.keys(S.answers||{}).length<5?'⏰ انتهى وقت المهمة':sc>=900?'🏆 خبير سلسلة توريد!':sc>=650?'🌟 أداء رائع!':sc>=400?'👍 بداية جيدة':'📚 تعلّمت الكثير اليوم';
+  $('#rName').textContent='المهندس/ة: '+S.name;
+  let v=0;const t0=performance.now();const f=t=>{const p=Math.min(1,(t-t0)/1200);$('#rScore').textContent=Math.round(sc*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f);
+  if(sc>=650)confetti();
+  loadLB();
+}
+async function loadLB(){
+  const body=$('#lbBody');
+  try{const d=await rpc('scr_leaderboard',{p_id:S?S.id:null});
+    $('#lbTotal').textContent=d.total+' مشارك';
+    if(!d.top.length){body.innerHTML='<div class="empty">🚚 لا توجد نتائج بعد – كن أول من يُكمل المهمة!</div>';return}
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+    const P=d.top.slice(0,3),M=['🥇','🥈','🥉'];
+    const order=[P[1],P[0],P[2]];
+    let h=`<div class="podium">${order.map(x=>x?`<div class="pod p${x.rank} ${x.me?'me':''}"><div class="m">${M[x.rank-1]}</div><div class="n">${esc(x.name)}</div><div class="s">${x.score}</div></div>`:'<div></div>').join('')}</div>`;
+    h+=d.top.slice(3).map(x=>`<div class="lrow ${x.me?'me':''}"><span class="r">${x.rank}</span><span class="n">${esc(x.name)}</span><span class="t">${fmt(x.secs)}</span><span class="s">${x.score}</span></div>`).join('');
+    if(d.me&&d.me.rank>100)h+=`<div class="lrow me"><span class="r">${d.me.rank}</span><span class="n">${esc(d.me.name)} (أنت)</span><span class="t">${fmt(d.me.secs)}</span><span class="s">${d.me.score}</span></div>`;
+    if(d.me)h=`<p class="small" style="color:var(--teal);font-weight:700;margin-top:6px">ترتيبك: #${d.me.rank} من ${d.total}</p>`+h;
+    body.innerHTML=h;
+  }catch(e){body.innerHTML='<div class="empty">تعذّر تحميل الترتيب. اضغط تحديث.</div>'}
+}
+$('#refreshBtn').onclick=loadLB;
+
+function confetti(){const c=document.createElement('canvas');c.className='confetti';document.body.appendChild(c);const x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const P=Array.from({length:120},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,v:2+Math.random()*3,r:Math.random()*6,c:['#ff8a1f','#13c6b3','#2fa8ff','#fff','#ffc23d'][Math.random()*5|0],a:Math.random()*6}));
+  let n=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.a+=.1;x.fillStyle=p.c;x.fillRect(p.x+Math.sin(p.a)*8,p.y,6,10)});if(++n<220)requestAnimationFrame(f);else c.remove()})()}
+
+/* ---------- Start / resume ---------- */
+$('#startBtn').onclick=async()=>{
+  const n=$('#name').value.trim();if(n.length<2){$('#startErr').textContent='اكتب اسمك (حرفان على الأقل)';return}
+  if(store.get())return location.reload();
+  $('#startBtn').disabled=true;$('#startErr').textContent='';
+  try{const r=await rpc('scr_start',{p_name:n});store.set({id:r.id,secret:r.secret});S=r;begin()}
+  catch(e){$('#startBtn').disabled=false;$('#startErr').textContent='تعذّر بدء المهمة، تحقق من الاتصال وحاول مجدداً.'}
+};
+$('#name').addEventListener('keydown',e=>{if(e.key=='Enter')$('#startBtn').click()});
+function begin(){
+  if(S.finished)return results(false);
+  cur=Object.keys(S.answers||{}).length;shownScore=0;animScore(sumPts());
+  show('s-game');startTimer(S.remaining);
+  if(cur>=5)return deliver();
+  renderChallenge();
+}
+(async()=>{
+  const a=store.get();
+  if(!a){show('s-welcome');return}
+  try{S=await rpc('scr_get',{p_id:a.id,p_secret:a.secret});begin()}
+  catch(e){if(e.fatal){try{localStorage.removeItem(LS)}catch(_){}}show('s-welcome');if(!e.fatal)$('#startErr').textContent='تعذّر الاتصال بالخادم، أعد تحميل الصفحة.'}
+})();
+
+/* ---------- Subtle supply-chain network background ---------- */
+(()=>{const c=$('#net'),x=c.getContext('2d');let W,H,N;
+ const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;N=Array.from({length:Math.min(28,W/30|0)},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}))};
+ rs();addEventListener('resize',rs);
+ (function f(){x.clearRect(0,0,W,H);N.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1});
+  for(let i=0;i<N.length;i++)for(let j=i+1;j<N.length;j++){const d=Math.hypot(N[i].x-N[j].x,N[i].y-N[j].y);if(d<150){x.strokeStyle=`rgba(47,168,255,${.5*(1-d/150)})`;x.beginPath();x.moveTo(N[i].x,N[i].y);x.lineTo(N[j].x,N[j].y);x.stroke()}}
+  N.forEach(p=>{x.fillStyle='#13c6b3';x.beginPath();x.arc(p.x,p.y,2.2,0,7);x.fill()});requestAnimationFrame(f)})()})();
+</script>
+</body>
+</html>
